@@ -3,8 +3,13 @@
 var_dolar = []
 
 # "case" flag
-reg_case = 0
+reg_case = None
+
+# ops
+switch_op = None
 
 # Eva ram (a key/value dictionary)
 vars = {}
+
+
 

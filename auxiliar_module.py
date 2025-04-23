@@ -27,6 +27,7 @@ def identify_elements(xml_root, verbose_mode=False):
                 tab_modules[element.tag] = [1]
     if verbose_mode:
         rprint("[white]O script utuliza [bold]" + str(sum(1 for _ in xml_root.iter()) - 1) + " elemento(s).")
+    print(tab_modules)
     return tab_modules
     """ Retorna uma tabela com os elmentos utilizados no script"""
 
@@ -35,9 +36,11 @@ def import_modules(xml_root, verbose_mode=False):
     """Importa os módulos associados a cada um dos elementos do script."""
     import_error = False
     tab_modules = identify_elements(xml_root, verbose_mode)
+    print(tab_modules)
     for element_tag in tab_modules:
+        print("ELEMENT TAG", element_tag)
         module_name = element_tag.lower() + "_module" # nome padrão para pastas dos módulos
-        sys.path.insert(0, module_name+ "/") # coloca o diretório da módulo no path
+        sys.path.insert(0, module_name + "/") # coloca o diretório do módulo no path
         try:
             mod = importlib.import_module(module_name) # importa o módulo
             tab_modules[element_tag].append(module_name + ".py")
@@ -46,7 +49,7 @@ def import_modules(xml_root, verbose_mode=False):
             import_error = True
             tab_modules[element_tag].append("Not imported")
             tab_modules[element_tag].append(None)
-            rprint("[bold red]Sorry! It was not possible to import the module " + "[red italic]" + module_name + "[/]")
+            # rprint("[bold red]Sorry! It was not possible to import the module " + "[red italic]" + module_name + "[/]")
     
     if verbose_mode:
         print("")
@@ -62,13 +65,15 @@ def import_modules(xml_root, verbose_mode=False):
                 table.add_row("[bold yellow]" + key, "[bold cyan ]" + str(value[0]).center(9), "[bold red]" + value[1])
                 #rprint("[bold yellow]" + key.ljust(20) + "[/][bold cyan ]" + str(value[0]).ljust(13) + "[bold red]" + value[1].ljust(30) + "[/]")
         console.print(table)
-    if import_error:
-        print("")
-        rprint("[bold red underline]*** The execution was aborted ***")
-        print("\n")
-        exit(1)
-    else:
-        return tab_modules
+    
+    # if import_error:
+    #     return tab_modules
+    #     print("")
+    #     rprint("[bold red underline]*** The execution was aborted ***")
+    #     print("\n")
+    #     exit(1)
+    # else:
+    return tab_modules
 
 
     

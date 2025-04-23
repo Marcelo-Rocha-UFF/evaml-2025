@@ -9,13 +9,9 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <light  state="ON" />
-    <evaEmotion emotion="NEUTRAL" />
-    <!-- <switch var="A">
-      <case op="exact" value="2"></case>
-      <case op="exact" value="3"></case>
-    </switch> -->
-    <led animation="HAPPY" />
-    <light state="OFF" />
+    <light id="LOOP" state="ON" color="WHITE"/>
+    <light state="OFF" color="WHITE"/>
+    <random var="ALEATORIO" min="1" max="10" />
+    <goto target="LOOP" />
   </script>
 </evaml>

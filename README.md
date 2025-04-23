@@ -26,3 +26,7 @@ Bibliotecas utilizadas:
 **Rich** - Colorização dos textos do terminal.
 
 pip install rich
+
+**lxml** - Biblioteca externa mais avançada e eficiente para manipulação de arquivos XML.
+
+pip install lxml
