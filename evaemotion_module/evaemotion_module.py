@@ -1,5 +1,7 @@
 from paho.mqtt import client as mqtt_client
 
+from rich import print as rprint
+
 import sys
 
 sys.path.insert(0, "../")
@@ -13,13 +15,15 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    # print("The module " + node.tag + " was called.")
+    rprint("[bold]State:[/bold] Setting the robot display to [bold]" + node.get("emotion") + "[/].")
 
-    message = node.attrib["emotion"]
+    message = node.get("emotion")
     
     client = create_mqtt_client()
 
     client.publish(topic_base + '/' + node.tag, message)
+
+    return node # It returns the same node
 
 
 # # MQTT

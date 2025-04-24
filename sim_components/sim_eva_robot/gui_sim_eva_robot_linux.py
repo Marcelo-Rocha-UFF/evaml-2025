@@ -55,10 +55,10 @@ class Gui(ttk.Frame):
 
         # Defining the image files
         self.eva_image = PhotoImage(file = "images/eva.png")
-        # self.background_image = PhotoImage(file = "images/background_cartoon.png")
+        self.background_image = PhotoImage(file = "images/background_cartoon.png")
         # self.background_image = PhotoImage(file = "images/background_night.png")
         # self.background_image = PhotoImage(file = "images/background_day.png")
-        self.background_image = PhotoImage(file = "images/background_night2.png") 
+        # self.background_image = PhotoImage(file = "images/background_night2.png") 
 
         # Define the top frame
         self.frame_top = tkinter.Frame(master=parent) #self.h

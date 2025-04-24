@@ -12,6 +12,14 @@ from rich.table import Table
 
 console = Console()
 
+def identify_targets(xml_root, verbose_mode=False):
+    tab_targets = {}
+    for element in xml_root.iter():
+        if element.get("id") and element.tag != "macro": # Cria a tabela com os elementos que possuem o atributo "id" excluindo as macros.
+            tab_targets[element.get("id")] = [element.tag, element]
+    return tab_targets
+
+
 def identify_elements(xml_root, verbose_mode=False):
     """Percorre toda a seção de script identificando os elementos utilizados."""
     if verbose_mode:
@@ -27,7 +35,6 @@ def identify_elements(xml_root, verbose_mode=False):
                 tab_modules[element.tag] = [1]
     if verbose_mode:
         rprint("[white]O script utuliza [bold]" + str(sum(1 for _ in xml_root.iter()) - 1) + " elemento(s).")
-    print(tab_modules)
     return tab_modules
     """ Retorna uma tabela com os elmentos utilizados no script"""
 
@@ -36,9 +43,7 @@ def import_modules(xml_root, verbose_mode=False):
     """Importa os módulos associados a cada um dos elementos do script."""
     import_error = False
     tab_modules = identify_elements(xml_root, verbose_mode)
-    print(tab_modules)
     for element_tag in tab_modules:
-        print("ELEMENT TAG", element_tag)
         module_name = element_tag.lower() + "_module" # nome padrão para pastas dos módulos
         sys.path.insert(0, module_name + "/") # coloca o diretório do módulo no path
         try:

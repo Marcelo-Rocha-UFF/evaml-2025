@@ -37,3 +37,5 @@ def node_processing(node, memory):
         #gui.terminal.see(tkinter.END)
         print("random command USING VAR, min = " + min + ", max = " + max + ", valor = " + memory.vars[var_name])
 
+
+        return node # It returns the same node

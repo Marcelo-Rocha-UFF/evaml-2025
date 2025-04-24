@@ -1,3 +1,5 @@
+from rich import print as rprint
+
 import sys
 
 sys.path.insert(0, "../")
@@ -9,11 +11,12 @@ port = config.MQTT_PORT # Broker Port.
 topic_base = config.SIMULATOR_TOPIC_BASE
 
 
+
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    # print("The module " + node.tag + " was called.")
-    memory.switch_op = node.attrib["var"]
-    memory.reg_case == False
-    print("Valor de switch_op:", memory.switch_op)
+    rprint("[bold]State:[/bold] Stopping the script.")
 
-    return node # It returns the same node
+    rprint("[bold green]Fim do script[/]")
+    exit(1)
+    
+    return node # It returns the "target" node 

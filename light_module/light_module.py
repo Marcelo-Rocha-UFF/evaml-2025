@@ -14,15 +14,20 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 def node_processing(node, memory):
     """ Função de tratamento do nó """
     # print("The module " + node.tag + " was called.")
-    if node.attrib["state"] == "OFF":
+    # É preciso tratar os casos em que o node vem sem o "color" definido
+    if node.get('state') == "OFF":
         message = 'BLACK' + "|" + 'OFF'
     else:
-        message = node.attrib['color'] + "|" + node.attrib["state"]
+        if node.get('color') == None:
+            light_color = 'WHITE'
+        else:
+            light_color = node.get('color')
+        message = light_color + "|" + node.attrib["state"]
 
     client = create_mqtt_client()
     client.publish(topic_base + '/' + node.tag, message)
 
-    return node
+    return node # It returns the same node
 
 
 # # MQTT

@@ -5,7 +5,7 @@ from rich import print as rprint
 # import xml.etree.ElementTree as ET #### Foi substituída pela lxml
 from lxml import etree as ET
 
-from auxiliar_module import identify_elements, import_modules
+from auxiliar_module import identify_targets, identify_elements, import_modules
 
 import robot_memory as memory
 
@@ -13,17 +13,11 @@ import robot_memory as memory
 # VM global variables
 root = {}
 script_node = {}
-links_node = {}
-fila_links =  [] # Link queue (commands)
-thread_pop_pause = False
-play = False # Play status of the script. This variable has an influence on the function. link_process
-script_file = "" # Variable that stores the pointer to the xml script file on disk.
-
 
 tree = ET.parse('teste.xml')  # XML code file
 root = tree.getroot() # script root node
 script_node = root.find("script")
-links_node = root.find("links")
+
 
 
 # modulo = script_node[0].tag + '-module'
@@ -94,24 +88,19 @@ def run_script(xml_root):
     else:
         node = xml_root
     while node != None: # Diferente de None (None significa que não tem irmão adiante)
-        time.sleep(1)
-        # Tratando elemento <goto>
-        if node.tag == "goto":
-            target_value = node.get('target')
-            node = script_node.find(".//*[@id=" + "'" + target_value + "'" + "]")
-            if node == None:
-                rprint("[red bold]It was not possible to find the target: " + target_value)
-                exit(1)
-        
-        print(node, len(node))
-        mod = tab_modules[node.tag][2]
-        eval('mod.node_processing')(node, memory)
-
-        if len(node) > 0: # Tratanto elemtos que têm filhos (<switch>, <case>)
+        if node.tag == "goto": # Tratando elemento <goto>
+            mod = memory.tab_modules[node.tag][2]
+            node = eval('mod.node_processing')(node, memory)
+        else:
+            if node.tag != "wait":
+                time.sleep(0) # somente pra facilitar a visualização.
+        mod = memory.tab_modules[node.tag][2]
+        node = eval('mod.node_processing')(node, memory)
+        if len(node) > 0: # Tratanto elementos que têm filhos (<switch>, <case>)
             run_script(node)
             node = node.getnext()
         else:
-            node = node.getnext()
+            node = node.getnext() # Elemento sem filhos
 
 
     # for filho in xml_root:
@@ -126,11 +115,14 @@ def run_script(xml_root):
     #             print("Memory case:", memory.reg_case, ". O case não será processado!")
     #             run_script(filho)        
 
-tab_modules = import_modules(script_node, verbose_mode=True)
+# Robot memory initializing
+memory.tab_modules = import_modules(script_node, verbose_mode=True)
+memory.tab_targets = identify_targets(root, verbose_mode=True)
 
-# identify_elements(script_node)
-# import_modules(tab_modules)
+print(memory.tab_targets)
 
+
+# Running the script
 run_script(script_node)
 
 # list_nodes = print(list(script_node))

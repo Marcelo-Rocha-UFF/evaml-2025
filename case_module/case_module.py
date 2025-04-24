@@ -21,3 +21,5 @@ def node_processing(node, memory):
             memory.reg_case = False
     print("Resultado da comparação:", memory.reg_case)
 
+    return node # It returns the same node
+

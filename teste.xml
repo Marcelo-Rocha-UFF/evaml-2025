@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <evaml
   name="teste"
-  xsi:noNamespaceSchemaLocation="xml_schema/robot-schema.xsd"
+  xsi:noNamespaceSchemaLocation="xml_schema/evaml_schema.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <settings>
     <voice tone="en-US_EmmaExpressive" />
@@ -9,9 +9,10 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <light id="LOOP" state="ON" color="WHITE"/>
-    <light state="OFF" color="WHITE"/>
-    <random var="ALEATORIO" min="1" max="10" />
+    <led id="LOOP" animation="HAPPY" />
+    <wait duration="1000" />
+    <led animation="ANGRY" />
+    <wait duration="1000" />
     <goto target="LOOP" />
   </script>
 </evaml>

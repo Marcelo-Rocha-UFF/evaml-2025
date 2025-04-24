@@ -1,5 +1,7 @@
 from paho.mqtt import client as mqtt_client
  
+from rich import print as rprint
+
 import sys
 
 sys.path.insert(0, "../")
@@ -13,12 +15,14 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    print("The module " + node.tag + " was called.")
+    rprint("[bold]State:[/bold] Playing the sound [bold]" + node.get("source") + "[/] in blocking mode = [bold]" + node.get("block") + "[/].")
 
-    message = node.attrib["source"] + "|" + node.attrib["block"]
+    message = node.get("source") + "|" + node.get("block")
+    
     client = create_mqtt_client()
     client.publish(topic_base + '/' + node.tag, message)
 
+    return node # It returns the same node
 
 # # MQTT
 # # The callback for when the client receives a CONNACK response from the server.
