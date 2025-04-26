@@ -1,5 +1,7 @@
 from paho.mqtt import client as mqtt_client
 
+from rich import print
+
 import sys
 
 sys.path.insert(0, "../")
@@ -16,7 +18,8 @@ def node_processing(node, memory):
     # print("The module " + node.tag + " was called.")
     # É preciso tratar os casos em que o node vem sem o "color" definido
     if node.get('state') == "OFF":
-        message = 'BLACK' + "|" + 'OFF'
+        light_color = 'BLACK'
+        message = light_color + "|" + 'OFF'
     else:
         if node.get('color') == None:
             light_color = 'WHITE'
@@ -24,6 +27,16 @@ def node_processing(node, memory):
             light_color = node.get('color')
         message = light_color + "|" + node.attrib["state"]
 
+    tab_colors = {"BLACK": "[b white on grey19] OFF [/]",
+                  "BLUE": "[b white on blue ] ON [/]",
+                  "GREEN": "[b white on green ] ON [/]",
+                  "PINK": "[b white on magenta ] ON [/]",
+                  "RED": "[b white on red ] ON [/]",
+                  "YELLOW": "[b white on yellow ] ON [/]",
+                  "WHITE": "[b black on white ] ON [/]"
+                  }
+    print("[bold]State:[/bold] Setting the Smart Bulb. 💡 " + tab_colors[light_color])
+    
     client = create_mqtt_client()
     client.publish(topic_base + '/' + node.tag, message)
 

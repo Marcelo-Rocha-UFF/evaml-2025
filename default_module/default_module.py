@@ -11,14 +11,9 @@ port = config.MQTT_PORT # Broker Port.
 topic_base = config.SIMULATOR_TOPIC_BASE
 
 
+
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-
-    if memory.op_switch == node.attrib["value"]:
-        memory.flag_case = True
-    else:
-        memory.flag_case = False
-    print("Resultado da comparação:", memory.flag_case)
-
-    return node # It returns the same node
-
+    print("[bold]State:[/bold] Executing the [b ] Default[/] option.")
+    return node # Retorna o próprio nó
+    

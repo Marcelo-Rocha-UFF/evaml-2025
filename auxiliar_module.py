@@ -13,11 +13,20 @@ from rich.table import Table
 console = Console()
 
 def identify_targets(xml_root, verbose_mode=False):
-    tab_targets = {}
+    tab_ids = {}
     for element in xml_root.iter():
-        if element.get("id") and element.tag != "macro": # Cria a tabela com os elementos que possuem o atributo "id" excluindo as macros.
-            tab_targets[element.get("id")] = [element.tag, element]
-    return tab_targets
+        # if element.get("id") and element.tag != "macro": # Cria a tabela com os elementos que possuem o atributo "id" excluindo as macros.
+        if element.get("id"):
+            tab_ids[element.get("id")] = [element.tag, element]
+    if verbose_mode:
+        print("")
+        table = Table(title="[bold]Table: Element identifiers")
+        table.add_column("Identifier")
+        table.add_column("Element type")
+        for id, value in tab_ids.items():
+            table.add_row("[bold yellow]" + id, "[bold cyan ]" + str(value[0]))
+        console.print(table)
+    return tab_ids
 
 
 def identify_elements(xml_root, verbose_mode=False):
@@ -58,7 +67,7 @@ def import_modules(xml_root, verbose_mode=False):
     
     if verbose_mode:
         print("")
-        table = Table(title="[bold]XML Elements and Modules")
+        table = Table(title="[bold]Table: XML Elements and Modules")
         table.add_column("XML Element")
         table.add_column("Ocurrence")
         table.add_column("Associated Module")

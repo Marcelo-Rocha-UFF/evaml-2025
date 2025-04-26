@@ -1,6 +1,6 @@
 from paho.mqtt import client as mqtt_client
  
-from rich import print as rprint
+from rich import print
 
 import sys
 
@@ -15,7 +15,7 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    rprint("[bold]State:[/bold] Playing the sound [bold]" + node.get("source") + "[/] in blocking mode = [bold]" + node.get("block") + "[/].")
+    print("[bold]State:[/bold] Playing ⏯️  the sound [bold]" + node.get("source") + "[/] in blocking mode = [bold]" + node.get("block") + "[/].")
 
     message = node.get("source") + "|" + node.get("block")
     

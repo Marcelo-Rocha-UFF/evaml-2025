@@ -1,6 +1,6 @@
 from paho.mqtt import client as mqtt_client
 
-from rich import print as rprint
+from rich import print
 
 import sys
 
@@ -15,7 +15,25 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    rprint("[bold]State:[/bold] Setting the robot display to [bold]" + node.get("emotion") + "[/].")
+
+    if node.get("emotion") == "NEUTRAL":
+        emoji = " 😐"
+    elif node.get("emotion") == "ANGRY":
+        emoji = " 😡"
+    elif node.get("emotion") == "DISGUST":
+        emoji = " 😖"
+    elif node.get("emotion") == "FEAR":
+        emoji = " 😧"
+    elif node.get("emotion") == "HAPPY":
+        emoji = " 😄"
+    elif node.get("emotion") == "INLOVE":
+        emoji = " 🥰"
+    elif node.get("emotion") == "SAD":
+        emoji = " 😔"
+    elif node.get("emotion") == "SURPRISE":
+        emoji = " 😲"
+
+    print("[bold]State:[/bold] Setting the robot display to [bold]" + node.get("emotion") + emoji + "[/].")
 
     message = node.get("emotion")
     

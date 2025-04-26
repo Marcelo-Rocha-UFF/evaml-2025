@@ -2,7 +2,7 @@ from paho.mqtt import client as mqtt_client
 
 import sys
 
-from rich import print as rprint
+from rich import print
 
 sys.path.insert(0, "../")
 
@@ -16,7 +16,7 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    rprint("[bold]State:[/bold] Setting the robot [bold]LED[/] to the animation [bold]" + node.get("animation") + "[/].")
+    print("[bold]State:[/bold] Setting the robot [bold]LED[/] to the animation [bold]" + node.get("animation") + "![/].")
 
     message = node.get("animation")
 

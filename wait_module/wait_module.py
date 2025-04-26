@@ -28,13 +28,13 @@ def node_processing(node, memory):
 
     # Barra de progresso personalizada
     with Progress(
-        TextColumn("[bold]State:[/bold] Waiting [bold]" + str(seconds) + "[/] seconds. [bold blue]Time left:"),
+        TextColumn("[bold]State:[/bold] Waiting [bold]" + str(seconds) + " [/] seconds. [bold blue]Time left:"),
         BarColumn(bar_width=20),
         TextColumn("[bold cyan]{task.fields[tempo]}")
     ) as progress:
         
         # Adicionar tarefa
-        task = progress.add_task("", total=tempo_total, tempo="00:05")
+        task = progress.add_task("", total=tempo_total, tempo="--:--")
         
         # Contagem regressiva
         for segundos_restantes in range(tempo_total, -1, -1):

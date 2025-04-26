@@ -9,10 +9,32 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <led id="LOOP" animation="HAPPY" />
-    <wait duration="1000" />
-    <led animation="ANGRY" />
-    <wait duration="1000" />
-    <goto target="LOOP" />
+    <light id="LOOP1" state="OFF" />
+    <wait duration="2000" />
+    <switch var="7">
+      <case op="exact" value="1">
+        <light state="ON" color="GREEN"/>
+        <useMacro macro="M1" />
+      </case>
+      <case op="exact" value="2">
+        <light state="ON" color="BLUE"/>
+      </case>
+      <default>
+        <light state="ON" color="RED"/>
+        <switch var="5">
+          <case op="exact" value="5">
+            <goto target="LOOP1" />
+          </case>
+        </switch>
+      </default>
+    </switch>
+    <light state="OFF" />
+    <goto target="LOOP_M" />
   </script>
+  <macros>
+    <macro id="M1">
+      <light id="LOOP_M" state="ON" color="YELLOW"/>
+      <light state="ON" color="PINK"/>
+    </macro>
+  </macros>
 </evaml>

@@ -1,4 +1,4 @@
-from rich import print as rprint
+from rich import print
 
 import sys
 
@@ -15,26 +15,18 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 def node_processing(node, memory):
     """ Função de tratamento do nó """
 
-    aux_node = node
-    # Getting the root element
-    while aux_node.getparent() is not None:
-        if aux_node.tag ==  "script":
-            break
-        aux_node = aux_node.getparent()
-
-    root = aux_node  # Root is the root node
-
+    # Verifica se o <goto> tem o atributo "target" definido
     target_value = node.get('target')
-
     if target_value == None:
-        rprint("[red bold]Target ID no found on <goto>.")
+        print("[red bold]Target ID no found on <goto>.")
         exit(1)
-    else:
-        node = root.find(".//*[@id=" + "'" + target_value + "'" + "]")
-        if node == None:
-            rprint("[red bold]It was not possible to find the target: " + target_value)
-            exit(1)
-    
-    rprint("[bold]State:[/bold] Jumping to the element [bold]" + node.tag + "[/] with [bold]id = " + node.get("id") + "[/].")
 
-    return node # It returns the "target" node 
+    # Procura pelo id em tab_ids
+    for key, value in memory.tab_ids.items():
+        if key == node.get("target"):
+            print("[bold]State:[/bold] Jumping to the element [bold]" + value[1].tag + "[/] with [bold]id = " + value[1].get("id") + "[/].")
+            return value[1] # Retorna o elemento associado ao id encontrado.
+    
+    # Não encontrou o "id"
+    print("[red bold]It was not possible to find the target: " + target_value)
+    exit(1)
