@@ -20,7 +20,10 @@ vars = {}
 # 2) o objeto que aponta para o módulo importado..
 tab_modules = {}
 
-# Essa tabela deve conter todos os elementos com "id", ou seja, aqueles que podem ser chamados por um <goto> ou por um <useMacro>.
+# Esta tabela deve conter todos os elementos com "id", ou seja, aqueles que podem ser chamados por um <goto> ou por um <useMacro>.
 tab_ids = {}
+
+# Esta tabela armazena a contagem dos números de sequência dos "logs" de eventos.
+log_seq_numbers = {}
 
 

@@ -28,7 +28,7 @@ def node_processing(node, memory):
 
     # Barra de progresso personalizada
     with Progress(
-        TextColumn("[bold]State:[/bold] Waiting [bold]" + str(seconds) + " [/] seconds. [bold blue]Time left:"),
+        TextColumn("[bold]State:[/bold] Waiting [bold]" + str(seconds) + " [/] seconds. 🕒"),
         BarColumn(bar_width=20),
         TextColumn("[bold cyan]{task.fields[tempo]}")
     ) as progress:

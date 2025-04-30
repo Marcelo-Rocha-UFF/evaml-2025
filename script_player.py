@@ -1,6 +1,7 @@
 import time
 
-# from rich import print
+from rich import print
+from rich.console import Console
 
 from lxml import etree as ET
 
@@ -8,7 +9,12 @@ from auxiliar_module import identify_targets, identify_elements, import_modules
 
 import robot_memory as memory
 
-tree = ET.parse('teste.xml')  # XML code file
+console = Console()
+
+# file_name = "teste.xml"
+file_name = "tabuada_nova.xml"
+
+tree = ET.parse(file_name)  # XML code file
 root = tree.getroot() # script root node
 script_node = root.find("script")
 
@@ -157,6 +163,8 @@ memory.tab_ids = identify_targets(root, verbose_mode=True)
 
 
 # Running the script
+console.rule("🤖 [red reverse b]  Executing the script: " + file_name + "  [/]")
+print()
 run_script(script_node)
 
 

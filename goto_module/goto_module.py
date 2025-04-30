@@ -24,7 +24,7 @@ def node_processing(node, memory):
     # Procura pelo id em tab_ids
     for key, value in memory.tab_ids.items():
         if key == node.get("target"):
-            print("[bold]State:[/bold] Jumping to the element [bold]" + value[1].tag + "[/] with [bold]id = " + value[1].get("id") + "[/].")
+            print("[bold]State:[/bold] Jumping ↪️  to the element [b white]" + value[1].tag.capitalize() + "[/] with [b white]id=" + value[1].get("id") + "[/].")
             return value[1] # Retorna o elemento associado ao id encontrado.
     
     # Não encontrou o "id"

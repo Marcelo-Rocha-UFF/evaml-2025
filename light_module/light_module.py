@@ -15,7 +15,6 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    # print("The module " + node.tag + " was called.")
     # É preciso tratar os casos em que o node vem sem o "color" definido
     if node.get('state') == "OFF":
         light_color = 'BLACK'
@@ -35,30 +34,19 @@ def node_processing(node, memory):
                   "YELLOW": "[b white on yellow ] ON [/]",
                   "WHITE": "[b black on white ] ON [/]"
                   }
-    print("[bold]State:[/bold] Setting the Smart Bulb. 💡 " + tab_colors[light_color])
+    print("[bold]State:[/bold] Setting the [b white]Light[/]. 💡 " + tab_colors[light_color])
     
+
     client = create_mqtt_client()
     client.publish(topic_base + '/' + node.tag, message)
 
     return node # It returns the same node
 
 
-# # MQTT
-# # The callback for when the client receives a CONNACK response from the server.
-# def on_connect(client, userdata, flags, rc):
-#     print("Mqtt client connected.")
-#     pass
-    
-
-# # The callback for when a PUBLISH message is received from the server.
-# def on_message(client, userdata, msg):
-#     pass
-
 # Run the MQTT client thread.
 def create_mqtt_client():
     client = mqtt_client.Client()
-    # client.on_connect = on_connect
-    # client.on_message = on_message
+
     try:
         client.connect(broker, port)
     except:

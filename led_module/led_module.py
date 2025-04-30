@@ -16,7 +16,7 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    print("[bold]State:[/bold] Setting the robot [bold]LED[/] to the animation [bold]" + node.get("animation") + "![/].")
+    print("[bold]State:[/bold] Setting the robot [b white]LED[/] to the animation [bold]" + node.get("animation") + "![/].")
 
     message = node.get("animation")
 
@@ -25,22 +25,9 @@ def node_processing(node, memory):
 
     return node # It returns the same node
 
-# # MQTT
-# # The callback for when the client receives a CONNACK response from the server.
-# def on_connect(client, userdata, flags, rc):
-#     print("Mqtt client connected.")
-#     pass
-    
 
-# # The callback for when a PUBLISH message is received from the server.
-# def on_message(client, userdata, msg):
-#     pass
-
-# Run the MQTT client thread.
 def create_mqtt_client():
     client = mqtt_client.Client()
-    # client.on_connect = on_connect
-    # client.on_message = on_message
     try:
         client.connect(broker, port)
     except:

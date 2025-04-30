@@ -1,3 +1,5 @@
+from rich import print
+
 import sys
 
 sys.path.insert(0, "../")
@@ -13,7 +15,7 @@ def node_processing(node, memory):
     """ Função de tratamento do nó """
     # print("The module " + node.tag + " was called.")
     memory.op_switch = node.attrib["var"]
-    memory.reg_case = False
-    print("Valor de switch_op:", memory.op_switch)
-
+    memory.flag_case = False
+    print("[bold]State:[/bold] Processing a [b white]Switch[/]. Var=" + memory.op_switch + ".")
+    
     return node # It returns the same node
