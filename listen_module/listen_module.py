@@ -27,15 +27,15 @@ def node_processing(node, memory):
     else:
         language_for_listen =  node.get("language")
     
-    print("[b white]State:[/] The robot is [b green]listening[/] in [b white reverse] " + language_for_listen + " [/]. Please, say something:")
-    
+    print('[b white]State:[/] The Robot is [b green]listening[/] in [b white reverse] ' + language_for_listen + ' [/]. ', end="")
+
     user_answer = console.input("[b white on green blink] > [/] ")
     
-    # if node.get("var") == None: # Maintains compatibility with the use of the $ variable
-    #     memory.var_dolar.append([var.get(), "<listen>"])
-    # else:
-    #     var_name = node.attrib["var"]
-    #     memory.vars[var_name] = var.get()
+    if node.get("var") == None: # Maintains compatibility with the use of the $ variable
+        memory.var_dolar.append([user_answer, "<listen>"])
+    else:
+        var_name = node.get("var")
+        memory.vars[var_name] = user_answer
 
     
 

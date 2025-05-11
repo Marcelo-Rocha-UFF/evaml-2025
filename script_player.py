@@ -12,73 +12,18 @@ import robot_memory as memory
 console = Console()
 
 # file_name = "teste.xml"
-file_name = "tabuada_nova.xml"
+file_name = "teste_counter.xml"
 
 tree = ET.parse(file_name)  # XML code file
 root = tree.getroot() # script root node
 script_node = root.find("script")
 
-# # Versão recursiva
-# def run_script(xml_root):
-#     # print("Rodando o script.")
-#     # if len(list(xml_root)) > 0: 
-#     #     node = xml_root[0]
-#     # else:
-#     node = xml_root
-#     while node != None: # Diferente de None (None significa que não tem irmão adiante).
-#         # Tratando elementos que têm filhos (<switch>, <case>).
-#         if len(node) > 0:
-#             # Alguns casos especiais
-#             if node.tag == "switch":
-#                 mod = memory.tab_modules[node.tag][2]
-#                 node = eval('mod.node_processing')(node, memory) # Executa o elemento <switch> que coloca o operador (do switch) na memória.
-#                 run_script(node[0]) # Executa o primeiro nó do elemento composto <switch>.
-#                 node = node.getnext() # Chama o próximo irmão do no corrente.
-            
-#             elif node.tag == "case":
-#                 # Um case só executa se houver um operador do switch na memória.
-#                 if memory.op_switch != None: # Deve haver um operador do switch na memória. None indica que um case verdadeiro já ocorreu neste switch
-#                     mod = memory.tab_modules[node.tag][2]
-#                     node = eval('mod.node_processing')(node, memory) # Executa o elemento <case> comparando com o operador (do switch) na memória. O result. da comparação fica em memory.flag_case.
-#                     if memory.flag_case == True:
-#                         memory.flag_case = False
-#                         memory.op_switch = None
-#                         run_script(node[0]) # Executa o primeiro nó do elemento composto <case> (True).
-#                         node = node.getnext() # Chama o próximo irmão do no corrente.
-#                     else:
-#                         node = node.getnext() # Chama o próximo irmão do no corrente.
-#                 else:
-#                     break # Quebra a recursão dos cases.
-        
-#         # Tratando elementos que não têm filhos (<led>, <light> etc)).
-#         else:
-#             # Alguns casos de nós especiais.
-#             if node.tag == "goto":
-#                 mod = memory.tab_modules[node.tag][2]
-#                 node = eval('mod.node_processing')(node, memory) # Executa o <goto> que retorna o nó destino.
-#                 mod = memory.tab_modules[node.tag][2]
-#                 node = eval('mod.node_processing')(node, memory) # Executa o nó de destino.
-#                 node = node.getnext() # Chama o próximo irmão do no corrente.
 
-#             elif node.tag == "useMacro":
-#                 aux_node = node # Será preciso restaurar o nó useMacro no fim desta função.
-#                 mod = memory.tab_modules[node.tag][2]
-#                 node = eval('mod.node_processing')(node, memory) # Executa o <useMacro> que retorna o nó <macro> referente ao "id".
-#                 run_script(node[0]) # Executa o primeiro elemento da macro.
-#                 node = aux_node # Restaura o nó useMacro para que seu próximo irmão seja chamado.
-#                 node = node.getnext() # Chama o próximo irmão do no corrente.
-
-#             else: # Execução de nós comuns.
-#                 mod = memory.tab_modules[node.tag][2]
-#                 node = eval('mod.node_processing')(node, memory)
-#                 node = node.getnext() # Chama o próximo irmão do no corrente.
-        
 # Versão iterativa
 def run_script(xml_root):
     node = xml_root[0]
 
     while True: # Roda até ser interrompido por um break.
-
         if node == None: # None significa o fim de um um nível, onde não existe mais um nó irmão.
             if len(memory.node_stack) != 0: # Se tem elemento na pilha.
                 node = memory.node_stack.pop()
@@ -149,12 +94,12 @@ def run_script(xml_root):
 
             else:
                 if node.tag != "wait":
-                    time.sleep(1)
+                    time.sleep(.2) # Somente para não rodar muito rápido.
                 mod = memory.tab_modules[node.tag][2]
                 node = eval('mod.node_processing')(node, memory)
+                if node.tag == "stop":
+                    break
                 node = node.getnext() # Chama o próximo irmão do no corrente.
-
-
 
 
 # Robot memory initializing
@@ -163,40 +108,11 @@ memory.tab_ids = identify_targets(root, verbose_mode=True)
 
 
 # Running the script
-console.rule("🤖 [red reverse b]  Executing the script: " + file_name + "  [/]")
+console.rule("🤖 [red reverse b]  Executing the script: " + file_name + "  [/] 🤖")
 print()
 run_script(script_node)
+# End of script
+console.rule("🤖 [green reverse b]  Script finished: " + file_name + "  [/] 🤖")
+print()
 
-
-# def run_script(xml_root):
-#     # print("Rodando o script.")
-#     if len(list(xml_root)) > 0: 
-#         node = xml_root[0]
-#     else:
-#         node = xml_root
-#     while node != None: # Diferente de None (None significa que não tem irmão adiante)
-        
-#         if node.tag == "goto": # Tratando elemento <goto>
-#             mod = memory.tab_modules[node.tag][2]
-#             node = eval('mod.node_processing')(node, memory)
-
-#         elif node.tag == "useMacro": # Tratando elemento <useMacro>
-#             aux_node = node
-#             mod = memory.tab_modules[node.tag][2]
-#             node = eval('mod.node_processing')(node, memory)
-#             run_script(node)
-#             node = aux_node.getnext()
-#             run_script(node)
-#         else:
-#             if node.tag != "wait":
-#                 time.sleep(0) # somente pra facilitar a visualização.
-
-#         mod = memory.tab_modules[node.tag][2]
-#         node = eval('mod.node_processing')(node, memory)
-
-#         if len(node) > 0: # Tratanto elementos que têm filhos (<switch>, <case>)
-#             run_script(node)
-#             node = node.getnext()
-#         else:
-#             node = node.getnext() # Elemento sem filhos
 

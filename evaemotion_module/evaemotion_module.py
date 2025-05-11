@@ -33,7 +33,7 @@ def node_processing(node, memory):
     elif node.get("emotion") == "SURPRISE":
         emoji = " 😲"
 
-    print("[bold]State:[/bold] Setting the robot expression to [bold]" + node.get("emotion") + emoji + "[/].")
+    print("[b white]State:[/] Setting the robot expression to [bold]" + node.get("emotion") + emoji + "[/].")
 
     message = node.get("emotion")
     

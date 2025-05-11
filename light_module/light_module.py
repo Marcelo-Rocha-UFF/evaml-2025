@@ -32,9 +32,9 @@ def node_processing(node, memory):
                   "PINK": "[b white on magenta ] ON [/]",
                   "RED": "[b white on red ] ON [/]",
                   "YELLOW": "[b white on yellow ] ON [/]",
-                  "WHITE": "[b black on white ] ON [/]"
+                  "WHITE": "[b reverse white] ON [/]"
                   }
-    print("[bold]State:[/bold] Setting the [b white]Light[/]. 💡 " + tab_colors[light_color])
+    print("[b white]State:[/] Setting the [b white]Smart Bulb[/]. 💡 " + tab_colors[light_color])
     
 
     client = create_mqtt_client()

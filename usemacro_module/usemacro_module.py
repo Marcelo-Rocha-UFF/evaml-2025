@@ -21,7 +21,7 @@ def node_processing(node, memory):
     # Procura pelo id em tab_ids
     for key, value in memory.tab_ids.items():
         if key == node.get("macro"):
-            rprint("[bold]State:[/bold] Using macro [bold]" + key + "[/].")
+            rprint("[b white]State:[/] Using macro [b white]" + key + "[/].")
             return value[1] # Retorna a macro associada ao "id" encontrado.
     
     # Não encontrou o "id"

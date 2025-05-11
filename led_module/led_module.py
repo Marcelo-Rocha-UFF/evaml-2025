@@ -16,7 +16,7 @@ topic_base = config.SIMULATOR_TOPIC_BASE
 
 def node_processing(node, memory):
     """ Função de tratamento do nó """
-    print("[bold]State:[/bold] Setting the robot [b white]LED[/] to the animation [bold]" + node.get("animation") + "![/].")
+    print("[b white]State:[/] Setting the robot [b white]LED[/] to the animation [bold]" + node.get("animation") + "![/].")
 
     message = node.get("animation")
 
