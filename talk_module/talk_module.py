@@ -1,4 +1,5 @@
-from paho.mqtt import client as mqtt_client
+
+import time
 
 import sys
 
@@ -12,19 +13,27 @@ sys.path.insert(0, "../")
 
 import config  # Module with network device configurations.
 
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
+topic_base = config.ROBOT_TOPIC_BASE
 
 
 
-def node_processing(node, memory):
+# Função de bloqueio que é usada para sincronia entre os módulos e o Script Player
+def block(state, memory):
+    memory.robot_state = state # Altera o estado do robô.
+    while memory.robot_state != "free": # Aguarda que o robô fique livre para seguir para o próximo comando.
+        time.sleep(0.01)
+
+
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
     if node.text == None: # There is no text to speech
         print("[b white on red blink] FATAL ERROR [/]: [b yellow reverse] There is no text to speech [/] in the element [b white]<talk>[/]. Please, check your code.✋⛔️")
         exit(1)
 
     texto = node.text
+    palavras = texto.split()
+    texto_normalizado = ' '.join(palavras)
+    texto = texto_normalizado.replace('\n', '').replace('\r', '').replace('\t', '') # Remove tabulações e salto de linha.
     # Replace variables throughout the text. variables must exist in memory
     if "#" in texto:
         # Checks if the robot's memory (vars) is empty
@@ -32,7 +41,7 @@ def node_processing(node, memory):
             print("[b white on red blink] FATAL ERROR [/]: [b yellow reverse] No variables have been defined [/] to be used in the[b white] <talk>[/]. Please, check your code.✋⛔️")
             exit(1)
 
-        var_list = re.findall(r'\#[a-zA-Z]+[0-9]*', texto) # Generate list of occurrences of vars (#...)
+        var_list = re.findall(r'\#[a-zA-Z_]+[0-9]*', texto) # Generate list of occurrences of vars (#...)
         for v in var_list:
             if v[1:] in memory.vars:
                 texto = texto.replace(v, str(memory.vars[v[1:]]))
@@ -77,19 +86,10 @@ def node_processing(node, memory):
 
 
 
-
-    # client = create_mqtt_client()
-    # client.publish(topic_base + '/' + node.tag, message)
+    # Controla o robô físico
+    if memory.running_mode == "robot":
+        message = texto[ind_random]
+        client_mqtt.publish(topic_base + '/' + node.tag, message)
+        block("Speaking", memory)
 
     return node # It returns the same node
-
-
-def create_mqtt_client():
-    client = mqtt_client.Client()
-    try:
-        client.connect(broker, port)
-    except:
-        print ("Unable to connect to Broker.")
-        exit(1)
-    
-    return client

@@ -2,24 +2,12 @@ import time
 
 from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn
 
-import sys
-
-sys.path.insert(0, "../")
-
-import config  # Module with network device configurations.
-
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
 
 
-def node_processing(node, memory):
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
-    # print("The module " + node.tag + " was called.")
 
     duration = node.attrib["duration"]
-    # gui.terminal.insert(INSERT, "\nSTATE: Pausing. Duration = " + duration + " ms")
-    # gui.terminal.see(tkinter.END)
     
     seconds = int(duration)/1000
 
@@ -28,7 +16,7 @@ def node_processing(node, memory):
 
     # Barra de progresso personalizada
     with Progress(
-        TextColumn("[bold]State:[/bold] Waiting [bold]" + str(seconds) + " [/] seconds. 🕒"),
+        TextColumn("[b white]State:[/] [b white]Waiting [/]for [b white]" + str(seconds) + "[/] seconds. 🕒"),
         BarColumn(bar_width=20),
         TextColumn("[bold cyan]{task.fields[tempo]}")
     ) as progress:

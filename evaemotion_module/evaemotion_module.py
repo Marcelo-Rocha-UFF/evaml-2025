@@ -1,5 +1,3 @@
-from paho.mqtt import client as mqtt_client
-
 from rich import print
 
 import sys
@@ -8,62 +6,53 @@ sys.path.insert(0, "../")
 
 import config  # Module with network device configurations.
 
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
+topic_base = config.ROBOT_TOPIC_BASE
 
 
-def node_processing(node, memory):
+
+
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     if node.get("emotion") == "NEUTRAL":
         emoji = " 😐"
+    elif node.get("emotion") == "GREETINGS":
+        emoji = " 👋👋"
+    elif node.get("emotion") == "BROKEN":
+        emoji = " 😵"
+    elif node.get("emotion") == "PLEASED":
+        emoji = " 🙂"
     elif node.get("emotion") == "ANGRY":
         emoji = " 😡"
+    elif node.get("emotion") == "ANGRY2":
+        emoji = " 😡😡"
     elif node.get("emotion") == "DISGUST":
         emoji = " 😖"
-    elif node.get("emotion") == "FEAR":
+    elif node.get("emotion") == "AFRAID":
         emoji = " 😧"
     elif node.get("emotion") == "HAPPY":
         emoji = " 😄"
-    elif node.get("emotion") == "INLOVE":
+    elif node.get("emotion") == "IN_LOVE":
         emoji = " 🥰"
     elif node.get("emotion") == "SAD":
         emoji = " 😔"
-    elif node.get("emotion") == "SURPRISE":
+    elif node.get("emotion") == "SURPRISED":
         emoji = " 😲"
+    elif node.get("emotion") == "SPEECH_ON_1":
+        emoji = " 💬 ⭕"
+    elif node.get("emotion") == "SPEECH_OFF_1":
+        emoji = " 🔇"
+    elif node.get("emotion") == "SPEECH_ON_2":
+        emoji = " 💬💬"
+    elif node.get("emotion") == "SPEECH_OFF_2":
+        emoji = " 🔇🔇"
 
-    print("[b white]State:[/] Setting the robot expression to [bold]" + node.get("emotion") + emoji + "[/].")
+    print("[b white]State:[/] Setting the robot [b white]expression[/] to [bold]" + node.get("emotion") + emoji + "[/].")
 
-    message = node.get("emotion")
-    
-    client = create_mqtt_client()
-
-    client.publish(topic_base + '/' + node.tag, message)
+    if memory.running_mode == "robot":
+        message = node.get("emotion")
+        topic = "expression" # Para o FRED o tópico não é "emotion"
+        client_mqtt.publish(topic_base + '/' + topic, message.lower())
 
     return node # It returns the same node
 
-
-# # MQTT
-# # The callback for when the client receives a CONNACK response from the server.
-# def on_connect(client, userdata, flags, rc):
-#     print("Mqtt client connected.")
-#     pass
-    
-
-# # The callback for when a PUBLISH message is received from the server.
-# def on_message(client, userdata, msg):
-#     pass
-
-# Run the MQTT client thread.
-def create_mqtt_client():
-    client = mqtt_client.Client()
-    # client.on_connect = on_connect
-    # client.on_message = on_message
-    try:
-        client.connect(broker, port)
-    except:
-        print ("Unable to connect to Broker.")
-        exit(1)
-    
-    return client

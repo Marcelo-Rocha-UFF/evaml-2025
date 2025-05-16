@@ -9,6 +9,10 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <mqtt topic="AAAA"></mqtt>
+    <motion type="FORWARD"/>
+    <wait duration="5000" />
+    <motion type="DANCE1" />
+    <wait duration="5000" />
+    <motion type="MOONWALK" />
   </script>
 </evaml>

@@ -9,22 +9,23 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <light id="LOOP1" state="ON" color="RED"/>
-    <led animation="HAPPY" />
-    <useMacro macro="M1" />
-    <evaEmotion emotion="ANGRY" />
-    <useMacro macro="M2" />
-    <listen language="pt-BR"/>
-    <goto target="LOOP1" />
+    <useMacro macro="M3" />
+    <talk>Voltando!</talk>
   </script>
   <macros>
     <macro id="M1">
-      <audio source="efx-blin" block="TRUE" />
-      <counter var="VAR" op="=" value="2" />
+      <audio id="TARGET1" source="efx-blin" block="TRUE" />
+      <counter var="VAR" op="=" value="1" />
+      <goto target="TARGET3" />
     </macro>
     <macro id="M2">
-      <led animation="SAD" />
+      <led id="TARGET2" animation="SAD" />
+      <counter var="VAR2" op="=" value="2" />
+    </macro>
+    <macro id="M3">
+      <led id="TARGET3" animation="HAPPY" />
       <counter var="VAR2" op="=" value="3" />
+      <useMacro macro="M2" />
     </macro>
   </macros>
 </evaml>

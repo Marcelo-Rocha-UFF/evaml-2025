@@ -1,5 +1,3 @@
-from paho.mqtt import client as mqtt_client
-
 from rich import print
 
 import re
@@ -10,12 +8,10 @@ sys.path.insert(0, "../")
 
 import config  # Module with network device configurations.
 
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
 topic_base = config.SIMULATOR_TOPIC_BASE
 
 
-def node_processing(node, memory):
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     if (len(node.get("topic"))) == 0: # erro
@@ -31,7 +27,6 @@ def node_processing(node, memory):
     texto = ' '.join(palavras) # Removendo mais de um espaço entre as palavras.
     texto = texto.replace('\n', '').replace('\r', '').replace('\t', '') # Remove tabulações e salto de linha.
     # Replace variables throughout the text. variables must exist in memory
-    
     if "#" in texto:
         var_list = re.findall(r'\#[a-zA-Z]+[a-zA-Z0-9_-]*', texto) # Generate list of occurrences of vars (#...)
         for v in var_list:
@@ -64,9 +59,10 @@ def node_processing(node, memory):
 
     print("[b white ]STATE[/]:[bold] Sending the [b white]MQTT message: [/][yellow]" + texto + "[/]. [b white] TOPIC: [/][reverse cyan] " + node.get("topic") + " [/].") #  to the topic: [b white]" + node.get("topic") + "[/]."
 
-    client = create_mqtt_client()
-    # Antes de enviar, remove os caracteres de pulo de linha do texto.
-    client.publish(node.get("topic"), texto)    
+    # Envia para o robô físico.
+    if memory.running_mode == "robot":
+        # Envia para o robô.
+        client_mqtt.publish(node.get("topic"), texto)    
     
     return node # It returns the same node
 

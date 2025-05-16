@@ -1,18 +1,8 @@
 from rich import print
 
-import sys
-
-sys.path.insert(0, "../")
-
-import config  # Module with network device configurations.
-
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
 
 
-
-def node_processing(node, memory):
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     # Verifica se o <goto> tem o atributo "target" definido

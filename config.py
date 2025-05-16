@@ -7,7 +7,10 @@ SMART_BULB_PORT      = 55443
 # Note: All robots (EVA and FRED) will access the broker through the IP 192.168.99.100
 MQTT_BROKER_ADRESS      = '127.0.0.1' # Acer Laptop IP address # Ip adress (Fred router) 192.168.99.100
 MQTT_PORT               = 1883
-ROBOT_TOPIC_BASE        = 'EVA' # You can change it if you wish to use another robot such as FRED
+# 'FRED_1021516' (FRED)
+# 'FRED_14194525' (Frida)
+ROBOT_TOPIC_BASE        = 'FRED_14194525' # You can change it if you wish to use another robot such as FRED
+
 SIMULATOR_TOPIC_BASE    = 'SIM'
 
 # Default audio file extension.

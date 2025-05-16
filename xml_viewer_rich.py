@@ -21,7 +21,7 @@ def xml_to_tree(elemento, tree):
         xml_to_tree(filho, node)
 
 # Carregar o XML
-tree = etree.parse("tabuada_nova.xml")
+tree = etree.parse("teste_case.xml")
 root = tree.getroot()
 
 # Criar árvore visual

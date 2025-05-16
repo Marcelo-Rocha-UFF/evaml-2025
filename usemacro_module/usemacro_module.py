@@ -1,15 +1,8 @@
-from paho.mqtt import client as mqtt_client
-
-import sys
-
 from rich import print as rprint
 
-sys.path.insert(0, "../")
-
-import config  # Module with network device configurations.
 
 
-def node_processing(node, memory):
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     # Verifica se a <macro> tem o atributo "id" definido

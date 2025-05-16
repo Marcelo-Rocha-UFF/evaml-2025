@@ -47,68 +47,37 @@ Revision: 2024/09/26
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="headMotionListType">
+	<xs:simpleType name="motionListType"> <!--# Movimentos do FRED -->
 		<xs:restriction base="xs:string">
-			<!-- commands compatible with CICESE servomotor control software (previous version of XMLSchema). -->
-			<xs:enumeration value="YES"/>
-			<xs:enumeration value="2YES"/>
-			<xs:enumeration value="NO"/>
-			<xs:enumeration value="2NO"/>
-			<xs:enumeration value="CENTER"/>
-			<xs:enumeration value="LEFT"/>
-			<xs:enumeration value="RIGHT"/>
-			<xs:enumeration value="UP"/>
-			<xs:enumeration value="DOWN"/>
-			<xs:enumeration value="2UP"/>
-			<xs:enumeration value="2DOWN"/>
-			<xs:enumeration value="2RIGHT"/>
-			<xs:enumeration value="2LEFT"/>
-			<xs:enumeration value="DOWN_RIGHT"/>
-			<xs:enumeration value="2DOWN_RIGHT"/>
-			<xs:enumeration value="DOWN_LEFT"/>
-			<xs:enumeration value="2DOWN_LEFT"/>
-			<xs:enumeration value="UP_RIGHT"/>
-			<xs:enumeration value="2UP_RIGHT"/>
-			<xs:enumeration value="UP_LEFT"/>
-			<xs:enumeration value="2UP_LEFT"/>
-			<!-- commands based on the new servomotor control software using the Arduino board. -->
-			<xs:enumeration value="UP1"/>
-			<xs:enumeration value="UP2"/>
-			<xs:enumeration value="DOWN1"/>
-			<xs:enumeration value="DOWN2"/>
-			<xs:enumeration value="LEFT1"/>
-			<xs:enumeration value="LEFT2"/>
-			<xs:enumeration value="LEFT3"/>
-			<xs:enumeration value="RIGHT1"/>
-			<xs:enumeration value="RIGHT2"/>
-			<xs:enumeration value="RIGHT3"/>
-			<xs:enumeration value="LEFT_UP1"/>
-			<xs:enumeration value="LEFT_UP2"/>
-			<xs:enumeration value="LEFT_UP3"/>
-			<xs:enumeration value="RIGHT_UP1"/>
-			<xs:enumeration value="RIGHT_UP2"/>
-			<xs:enumeration value="RIGHT_UP3"/>
-			<xs:enumeration value="LEFT_DOWN1"/>
-			<xs:enumeration value="LEFT_DOWN2"/>
-			<xs:enumeration value="LEFT_DOWN3"/>
-			<xs:enumeration value="RIGHT_DOWN1"/>
-			<xs:enumeration value="RIGHT_DOWN2"/>
-			<xs:enumeration value="RIGHT_DOWN3"/>
-			<xs:enumeration value="CENTER_X"/>
-			<xs:enumeration value="CENTER_Y"/>
+			<xs:enumeration value="FORWARD"/> <!-- Walk forward (2 walk cycles). -->
+			<xs:enumeration value="FORWARD2"/> <!-- Walk forward (4 walk cycles). -->
+			<xs:enumeration value="BACKWARD"/> <!-- Walk backward (2 walk cycles). -->
+			<xs:enumeration value="BACKWARD2"/> <!-- Walk backward (4 walk cycles). -->
+			<xs:enumeration value="LEFT"/> <!-- Walk to the left (2 walk cycles). -->
+			<xs:enumeration value="LEFT_MOON"/> <!-- Walk to the left in moonwalk style (2 walk cycles). -->
+			<xs:enumeration value="RIGHT"/> <!-- Walk to the right (2 walk cycles). -->
+			<xs:enumeration value="RIGHT_MOON"/> <!-- Walk to the right in moonwalk style (2 walk cycles). -->
+			<xs:enumeration value="MOONWALK"/> <!-- Moonwalk left and right (2 cycles). -->
+			<xs:enumeration value="MOONWALK2"/> <!-- Moonwalk left and right (4 cycles). -->
+			<xs:enumeration value="DANCE1"/> <!-- Dance 1 (2 cycles). -->
+			<xs:enumeration value="DANCE1_2"/> <!-- Dance 1 (4 cycles). -->
+			<xs:enumeration value="DANCE2"/> <!-- Dance 2 (2 cycles). -->
+			<xs:enumeration value="DANCE2_2"/> <!-- Dance 2 (4 cycles). -->
+			<xs:enumeration value="STOMPING_FOOT_R"/> <!-- The robot stamps its right foot 4 times. -->
+			<xs:enumeration value="STOMPING_FOOT_L"/> <!-- The robot stamps its left foot 4 times. -->
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:simpleType name="armMotionListType">
+	<xs:simpleType name="poseListType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="POSITION 0"/> <!-- Move arm to starting position (0) -->
-			<xs:enumeration value="POSITION 1"/>
-			<xs:enumeration value="POSITION 2"/>
-			<xs:enumeration value="POSITION 3"/> <!-- Move arm to starting position (3) -->
-			<xs:enumeration value="UP"/> <!-- Move arm to next higher position -->
-			<xs:enumeration value="DOWN"/> <!-- Move arm to next lower position -->
-			<xs:enumeration value="SHAKE1"/> <!-- Swings arm up and down around current position (1 x cycle) -->
-			<xs:enumeration value="SHAKE2"/> <!-- Swing arm up and down around current position (2 x cycle) -->
+			<xs:enumeration value="NEUTRAL"/> <!-- Place FRED on the neutral pose. -->
+			<xs:enumeration value="LEFT_FOOT1"/> <!-- Place FRED on the tip of its left foot. -->
+			<xs:enumeration value="LEFT_FOOT2"/> <!-- Place FRED with its left foot raised. -->
+			<xs:enumeration value="RIGHT_FOOT1"/> <!-- Place FRED on the tip of its right foot. -->
+			<xs:enumeration value="RIGHT_FOOT2"/> <!-- Place FRED with its right foot raised. -->
+			<xs:enumeration value="SAD_FOOT_SLOW"/> <!-- Put FRED "sitting", "broken" (slowly). -->
+			<xs:enumeration value="SAD_FOOT_FAST"/> <!-- Put FRED "sitting", "broken". (faster). -->
+			<xs:enumeration value="TIPTOE_FOOT"/> <!-- PutFRED on its toes -->
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -121,10 +90,6 @@ Revision: 2024/09/26
 	</xs:simpleType>
 
 	<xs:simpleType name="topicType">
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
-
-	<xs:simpleType name="messageType">
 		<xs:restriction base="xs:string"/>
 	</xs:simpleType>
 
@@ -223,15 +188,19 @@ Revision: 2024/09/26
 
 	<xs:simpleType name="ledAnimationType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="HAPPY"/>
-			<xs:enumeration value="SAD"/>
-			<xs:enumeration value="ANGRY"/>
-            <xs:enumeration value="ANGRY2"/>
-			<xs:enumeration value="STOP"/>
-			<xs:enumeration value="SPEAK"/>
-			<xs:enumeration value="LISTEN"/>
-			<xs:enumeration value="SURPRISE"/>
-            <xs:enumeration value="WHITE"/>
+			<xs:enumeration value="HAPPY"/> <!-- GREEN -->
+			<xs:enumeration value="SAD"/> <!-- BLUE -->
+			<xs:enumeration value="ANGRY"/> <!-- RED -->
+			<xs:enumeration value="STOP"/> <!-- BLACK (OFF) -->
+			<xs:enumeration value="SPEAK"/> <!-- BLUE -->
+			<xs:enumeration value="LISTEN"/> <!-- GREEN -->
+			<xs:enumeration value="SURPRISE"/> <!-- YELLOW -->
+			<xs:enumeration value="GREEN"/>
+			<xs:enumeration value="BLUE"/>
+			<xs:enumeration value="RED"/>
+			<xs:enumeration value="WHITE"/>
+            <xs:enumeration value="YELLOW"/>
+			<xs:enumeration value="PINK"/>
             <xs:enumeration value="RAINBOW"/>
 		</xs:restriction>
 	</xs:simpleType>
@@ -323,14 +292,21 @@ Revision: 2024/09/26
 
 	<xs:simpleType name="evaEmotionType">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="GREETINGS"/>
 			<xs:enumeration value="NEUTRAL"/>
+			<xs:enumeration value="BROKEN"/>
+			<xs:enumeration value="PLEASED"/>
 			<xs:enumeration value="HAPPY"/>
 			<xs:enumeration value="SAD"/>
 			<xs:enumeration value="ANGRY"/>
-			<xs:enumeration value="FEAR"/>
-			<xs:enumeration value="SURPRISE"/>
-			<xs:enumeration value="DISGUST"/>
-			<xs:enumeration value="INLOVE"/>
+			<xs:enumeration value="ANGRY2"/>
+			<xs:enumeration value="AFRAID"/>
+			<xs:enumeration value="SURPRISED"/>
+			<xs:enumeration value="IN_LOVE"/>
+			<xs:enumeration value="SPEECH_ON_1"/>
+			<xs:enumeration value="SPEECH_OFF_1"/>
+			<xs:enumeration value="SPEECH_ON_2"/>
+			<xs:enumeration value="SPEECH_OFF_2"/>
 		</xs:restriction>
 	</xs:simpleType>
 

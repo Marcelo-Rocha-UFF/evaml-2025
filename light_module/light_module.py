@@ -1,5 +1,3 @@
-from paho.mqtt import client as mqtt_client
-
 from rich import print
 
 import sys
@@ -8,12 +6,11 @@ sys.path.insert(0, "../")
 
 import config  # Module with network device configurations.
 
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
+topic_base = config.ROBOT_TOPIC_BASE
 
 
-def node_processing(node, memory):
+
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
     # É preciso tratar os casos em que o node vem sem o "color" definido
     if node.get('state') == "OFF":
@@ -24,7 +21,7 @@ def node_processing(node, memory):
             light_color = 'WHITE'
         else:
             light_color = node.get('color')
-        message = light_color + "|" + node.attrib["state"]
+            message = light_color + "|" + node.get("state")
 
     tab_colors = {"BLACK": "[b white on grey19] OFF [/]",
                   "BLUE": "[b white on blue ] ON [/]",
@@ -36,21 +33,8 @@ def node_processing(node, memory):
                   }
     print("[b white]State:[/] Setting the [b white]Smart Bulb[/]. 💡 " + tab_colors[light_color])
     
-
-    client = create_mqtt_client()
-    client.publish(topic_base + '/' + node.tag, message)
+    # Envia a mensagem MQTT para o módulo de controle da Smart Bulb.
+    if memory.running_mode == "robot":
+        client_mqtt.publish(topic_base + "/light", message); # Command for the physical smart bulb
 
     return node # It returns the same node
-
-
-# Run the MQTT client thread.
-def create_mqtt_client():
-    client = mqtt_client.Client()
-
-    try:
-        client.connect(broker, port)
-    except:
-        print ("Unable to connect to Broker.")
-        exit(1)
-    
-    return client

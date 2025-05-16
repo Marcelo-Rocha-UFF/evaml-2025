@@ -9,15 +9,9 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <log name="Log1">$</log>
-    <stop />
-    <counter var="y" op="=" value="120" />
-    <counter var="x" op="=" value="name" />
-    <talk>x=#x y=#y</talk>
-    <stop />
     <talk>Qual a sua idade?</talk>
-    <listen var="USER_AGE"/>
-    <counter var="USER_AGE" op="*" value="2" />
-    <talk>Sua idade x 2 é #USER_AGE</talk>
+    <listen var="_IDADE_1"/>
+    <counter var="_IDADE_1" op="*" value="2" />
+    <talk>Sua idade x 2 é #_IDADE_1</talk>
   </script>
 </evaml>

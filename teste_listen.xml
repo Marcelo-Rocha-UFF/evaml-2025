@@ -10,7 +10,5 @@
   </settings>
   <script>
     <light state="ON" color="PINK" />
-    <listen var="USER_NAME"/>
-    <mqtt topic="TOPIC">QR: #A_B1</mqtt>
   </script>
 </evaml>

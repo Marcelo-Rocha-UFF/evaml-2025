@@ -1,14 +1,5 @@
 from rich import print
 
-import sys
-
-sys.path.insert(0, "../")
-
-import config  # Module with network device configurations.
-
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
 
 
 def get_var_ref(var, memory):
@@ -55,10 +46,19 @@ def get_var_value(value, memory):
         else: # May be of type $n or $-n
             if "-" in value: # $-n type
                 indice = int(value[2:]) # Var dollar is of type $-n. then just take n and convert it to int
-                var_aux =  memory.var_dolar[-(indice + 1)][0] 
+                try:
+                    return  memory.var_dolar[-(indice + 1)][0]
+                except IndexError:
+                    print("[b white on red blink] FATAL ERROR [/]: [b yellow reverse] Unable to access the variable [/][b white] " + var + "[/] with the [b yellow reverse] index [/] used. Please, check your code.✋⛔️")
+                    exit(1)
+                
             else: # tipo $n
                 indice = int(value[1:]) # Var dollar is of type $n. then just take n and convert it to int
-                var_aux =  memory.var_dolar[(indice - 1)][0]
+                try:
+                    return  memory.var_dolar[(indice - 1)][0]
+                except IndexError:
+                    print("[b white on red blink] FATAL ERROR [/]: [b yellow reverse] Unable to access the variable [/][b white] " + var + "[/] with the [b yellow reverse] index [/] used. Please, check your code.✋⛔️")
+                    exit(1)
         
         try: # Testa se é um número.
             int(var_aux)
@@ -78,13 +78,14 @@ def get_var_value(value, memory):
                 exit(1)
         else:
             try: # Testa se é um número.
-                return int(memory.vars[value])
+                int(memory.vars[value])
+                return memory.vars[value]
             except:
                 print('[b white on red blink] FATAL ERROR [/]: You used a [b yellow reverse] string "' + memory.vars[value] + '" [/] as [b white]op2[/] of a [b pink]<counter>[/]. Please, check your code.✋⛔️')
                 exit(1)
         
     
-def node_processing(node, memory):
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     # Pega o operador.

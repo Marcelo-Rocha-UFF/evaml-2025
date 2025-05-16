@@ -29,7 +29,7 @@ def xml_to_graphviz(elemento, graph, parent_id=None, contador=[0]):
     return node_id
 
 # Carregar o XML
-tree = etree.parse("teste.xml")
+tree = etree.parse("tabuada_nova.xml")
 root = tree.getroot()
 
 # Criar grafo

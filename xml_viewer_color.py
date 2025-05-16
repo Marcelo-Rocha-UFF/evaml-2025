@@ -11,7 +11,7 @@ def xml_to_graphviz_colored(elemento, graph, parent_id=None, contador=[0], cores
             "led": "lightgreen",
             "wait": "lightyellow",
             "evaEmotion": "lightpink",
-            "goto": "lightcoral",
+            "goto": "lightcoral"
             # Adicione mais mapeamentos de tag para cor conforme necessário
         }
     
@@ -66,11 +66,11 @@ def xml_to_graphviz_colored(elemento, graph, parent_id=None, contador=[0], cores
     return node_id
 
 # Carregar o XML
-tree = etree.parse("teste.xml")
+tree = etree.parse("tabuada_nova.xml")
 root = tree.getroot()
 
 # Criar grafo
-dot = graphviz.Digraph(comment='XML Tree Visualization', format='png')
+dot = graphviz.Digraph(comment='XML Tree Visualization', format='svg')
 dot.attr('node', shape='box')
 dot.attr('graph', rankdir='LR')  # Layout da esquerda para a direita
 

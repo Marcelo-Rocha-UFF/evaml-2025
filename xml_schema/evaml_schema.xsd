@@ -1,7 +1,7 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 <!--
-XML Schema for the EvaML Language
+XML Schema for the EvaML Language (FRED Robot)
 This is EvaML
 Copyright : 2024 MIDIACOM LAB, All Rights Reserved.
 See https://www.midiacom.uff.br

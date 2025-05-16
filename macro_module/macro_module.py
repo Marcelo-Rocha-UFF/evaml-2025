@@ -1,11 +1,7 @@
-import sys
-
-sys.path.insert(0, "../")
-
-import config  # Module with network device configurations.
 
 
-def node_processing(node, memory):
+
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
 
     # Retorna o próprio node.

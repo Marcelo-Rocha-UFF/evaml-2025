@@ -528,7 +528,7 @@
             <useMacro macro="final" />
             <stop />
           </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
                 <useMacro macro="Pontuou" />
             </case>
             <default>
@@ -539,7 +539,7 @@
     <macro id="Pontuou">
       <evaEmotion emotion="HAPPY" />
       <led animation="HAPPY" />
-      <motion type="2UP_RIGHT" right-arm="UP" left-arm="DOWN"/>
+      <motion type="2UP_RIGHT" rightArm="UP" leftArm="DOWN"/>
       <random min="1" max="3" />
       <switch var="$">
         <case op="exact" value="1">
@@ -560,7 +560,7 @@
       <talk>Parabéns, voce ganhou um ponto </talk>
       <evaEmotion emotion="NEUTRAL" />
       <light state="ON" color="WHITE"/>
-      <motion type="CENTER" left-arm="POSITION 0" right-arm="POSITION 0"/>
+      <motion type="CENTER" leftArm="POSITION 0" rightArm="POSITION 0"/>
     </macro>
     <macro id="Não_pontuou">
       <evaEmotion emotion="SAD" />
@@ -576,13 +576,13 @@
           <light state="ON" color="BLACK"/>
         </case>
       </switch>
-      <motion type="NO" left-arm="UP" right-arm="UP"/>
+      <motion type="NO" leftArm="UP" rightArm="UP"/>
       <led animation="SAD" />
       <talk>A resposta dessa operação é #multiplicando</talk>
       <talk>Que pena, dessa vez você não pontuou, vamos para a próxima</talk>
       <light state="ON" color="WHITE"/>
       <evaEmotion emotion="NEUTRAL" />
-      <motion left-arm="POSITION 0" right-arm="POSITION 0"/>
+      <motion leftArm="POSITION 0" rightArm="POSITION 0"/>
     </macro>
     <macro id="materiais">
       <talk>Ana tem #multiplicando caixas de canetas.  Cada caixa contém $ canetas.    Quantas canetas no total tem Ana? / 
@@ -604,7 +604,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="2" />
             </case>
@@ -623,7 +623,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="3" />
             </case>
@@ -642,7 +642,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="4" />
             </case>
@@ -661,7 +661,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="5" />
             </case>
@@ -680,7 +680,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="6" />
             </case>
@@ -699,7 +699,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="7" />
             </case>
@@ -718,7 +718,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="8" />
             </case>
@@ -737,7 +737,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="9" />
             </case>
@@ -756,7 +756,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="10" />
             </case>
@@ -791,7 +791,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="1" />
             </case>
@@ -810,7 +810,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="2" />
             </case>
@@ -829,7 +829,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="3" />
             </case>
@@ -848,7 +848,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="4" />
             </case>
@@ -867,7 +867,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="5" />
             </case>
@@ -886,7 +886,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="6" />
             </case>
@@ -905,7 +905,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="7" />
             </case>
@@ -924,7 +924,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="8" />
             </case>
@@ -943,7 +943,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="9" />
             </case>
@@ -962,7 +962,7 @@
               <useMacro macro="final" />
               <stop />
             </case>
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
               <useMacro macro="Pontuou" />
               <counter var="multiplicando" op="/" value="10" />
             </case>
@@ -1025,12 +1025,12 @@
     </macro>
     <macro id="final">
       <evaEmotion emotion="HAPPY" />
-      <motion type="2UP_LEFT" left-arm="SHAKE1" right-arm="SHAKE1"/>
+      <motion type="2UP_LEFT" leftArm="SHAKE1" rightArm="SHAKE1"/>
       <led animation="RAINBOW" />
       <audio source="efx-mario-end-03" block="TRUE" />
       <light state="ON" color="BLACK"/>
       <talk>$1, então encerramos por aqui a nossa sessão. Você conseguiu um total de #pontos pontos. Tôrço para que tenha gostado da experiência de ter jogado comigo. Estarei te esperando para jogarmos em outro momento.</talk>
-      <motion type="CENTER" left-arm="POSITION 0" right-arm="POSITION 0"/>
+      <motion type="CENTER" leftArm="POSITION 0" rightArm="POSITION 0"/>
     </macro>
     <macro id="Nivelamento_3">
         <random min="6" max="9" />
@@ -1070,7 +1070,7 @@
             </switch>
             <listen />
             <switch var="$">
-                <case op="eq" value="multiplicando">
+                <case op="eq" value="#multiplicando">
                   <counter var="pont_min" op="+" value="15" />
                   <audio source="successed" block="TRUE" />
                   <talk>Parabéns!</talk>
@@ -1120,7 +1120,7 @@
         </switch>
         <listen />
         <switch var="$">
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
                 <counter var="pont_min" op="+" value="3" />
                 <audio source="successed" block="TRUE" />
                 <talk>Parabéns!</talk>
@@ -1168,7 +1168,7 @@
         </switch>
         <listen />
         <switch var="$">
-            <case op="eq" value="multiplicando">
+            <case op="eq" value="#multiplicando">
                 <counter var="pont_min" op="+" value="1" />
                 <audio source="successed" block="TRUE" />
                 <talk>Parabéns!</talk>

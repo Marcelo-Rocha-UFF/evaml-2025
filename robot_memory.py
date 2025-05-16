@@ -26,4 +26,11 @@ tab_ids = {}
 # Esta tabela armazena a contagem dos números de sequência dos "logs" de eventos.
 log_seq_numbers = {}
 
+# Modo de execução do script_player (default = sim)
+running_mode = 'sim'
 
+# Armazena uma resposta do robô físico. Pode ser um texto do STT, um expressão etc.
+robot_response = None
+
+# Armazena o estado do robô físico.
+robot_state = "free"

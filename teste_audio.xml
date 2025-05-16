@@ -9,10 +9,8 @@
     <audioEffects mode="ON" />
   </settings>
   <script>
-    <listen />
-    <listen />
-    <switch var="$-5">
-      <case op="exact" value="2"></case>
-    </switch>
+    <light state="ON" color="BLUE"/>
+    <audio source="song-i-believe-i-can-fly" block="TRUE" />
+    <light state="OFF" />
   </script>
 </evaml>

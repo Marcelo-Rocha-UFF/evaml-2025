@@ -1,65 +1,53 @@
-# Adapter module for the audio library
-# Depending on the OS it matters and defines a function called "playsound"
-from play_audio import playsound
 
-from paho.mqtt import client as mqtt_client
+from play_audio import playsound # Adapter module for the audio library.
+# Depending on the OS it matters and defines a function called "playsound".
  
 from rich import print
 
 import sys
 
+import time
+
 sys.path.insert(0, "./")
 
 import config  # Module with network device configurations.
 
-broker = config.MQTT_BROKER_ADRESS # Broker address.
-port = config.MQTT_PORT # Broker Port.
-topic_base = config.SIMULATOR_TOPIC_BASE
+topic_base = config.ROBOT_TOPIC_BASE
 
 
-def node_processing(node, memory):
+# Função de bloqueio que é usada para sincronia entre os módulos e o Script Player
+def block(state, memory):
+    memory.robot_state = state # Altera o estado do robô.
+    while memory.robot_state != "free": # Aguarda que o robô fique livre para seguir para o próximo comando.
+        time.sleep(0.01)
+
+
+def node_processing(node, memory, client_mqtt):
     """ Função de tratamento do nó """
     if node.get("block") == "TRUE":
-        print('[b white]State:[/][b white] Playing[/] ▶️  the sound [bold][b white]"' + node.get("source") + '"[/] in [b white]BLOCKING[/] mode.')
-        try:
-            playsound("audio_module/audio_files/" + node.get("source") + ".wav", block = True)
-        except FileNotFoundError as e:
-            print('[b white on red blink] FATAL ERROR [/]: [b yellow reverse] There was a problem playing the audio file [/]: [b white]"' + node.get("source") + '"[/]. Check if it [b white u]exists[/] or is in the [b white u]correct format[/] (wav).✋⛔️')
-            exit(1) 
+        if memory.running_mode == "robot":
+            print('[b white]State:[/][b white] Playing[/] ▶️  the sound [bold][b white]"' + node.get("source") + '"[/] in [b white]BLOCKING[/] mode.')
+            message = node.get("source") + "|" + node.get("block")
+            client_mqtt.publish(topic_base + '/' + node.tag, message)
+            block("Playing a sound", memory)
+        else:
+            try:
+                playsound("audio_module/audio_files/" + node.get("source") + ".wav", block = True)
+                print('[b white]State:[/][b white] Playing[/] ▶️  the sound [bold][b white]"' + node.get("source") + '"[/] in [b white]BLOCKING[/] mode.')
+            except FileNotFoundError as e:
+                print('[b white on red blink] FATAL ERROR [/]: [b yellow reverse] There was a problem playing the audio file [/]: [b white]"' + node.get("source") + '"[/]. Check if it [b white u]exists[/] or is in the [b white u]correct format[/] (wav).✋⛔️')
+                exit(1) 
     else:
-        try:
+        if memory.running_mode == "robot":
             print('[b white]State:[/][b white] Playing[/] ▶️  the sound [bold][b white]"' + node.get("source") + '"[/] in [b white]NON-BLOCKING[/] mode.')
-            playsound("audio_module/audio_files/" + node.get("source") + ".wav", block = False)
-        except FileNotFoundError as e:
-            print('[b white on red blink] FATAL ERROR [/]: [b yellow reverse] There was a problem playing the audio file [/]: [b white]"' + node.get("source") + '"[/]. Check if it [b u white]exists[/] or is in the [b u white]correct format[/] (wav)[/].✋⛔️')
-            exit(1) 
-
-    # message = node.get("source") + "|" + node.get("block")
-    # client = create_mqtt_client()
-    # client.publish(topic_base + '/' + node.tag, message)
-
+            message = node.get("source") + "|" + node.get("block")
+            client_mqtt.publish(topic_base + '/' + node.tag, message)
+        else:
+            try:
+                playsound("audio_module/audio_files/" + node.get("source") + ".wav", block = False)
+                print('[b white]State:[/][b white] Playing[/] ▶️  the sound [bold][b white]"' + node.get("source") + '"[/] in [b white]NON-BLOCKING[/] mode.')
+            except FileNotFoundError as e:
+                print('[b white on red blink] FATAL ERROR [/]: [b yellow reverse] There was a problem playing the audio file [/]: [b white]"' + node.get("source") + '"[/]. Check if it [b u white]exists[/] or is in the [b u white]correct format[/] (wav)[/].✋⛔️')
+                exit(1) 
+    
     return node # It returns the same node
-
-# # MQTT
-# # The callback for when the client receives a CONNACK response from the server.
-# def on_connect(client, userdata, flags, rc):
-#     print("Mqtt client connected.")
-#     pass
-    
-
-# # The callback for when a PUBLISH message is received from the server.
-# def on_message(client, userdata, msg):
-#     pass
-
-# Run the MQTT client thread.
-def create_mqtt_client():
-    client = mqtt_client.Client()
-    # client.on_connect = on_connect
-    # client.on_message = on_message
-    try:
-        client.connect(broker, port)
-    except:
-        print ("Unable to connect to Broker.")
-        exit(1)
-    
-    return client
