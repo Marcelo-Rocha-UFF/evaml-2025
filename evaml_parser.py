@@ -1,4 +1,5 @@
 import sys
+import os
 import copy # lib para a geracao de copias de objetos
 
 import xml.etree.ElementTree as ET
@@ -6,6 +7,11 @@ import xmlschema # xmlschema validation
 
 from rich import print
 from rich.console import Console
+from rich.progress import Progress, BarColumn
+
+import time
+
+import config
 
 console = Console()
 
@@ -34,7 +40,7 @@ def evaml_validator(evaml_file):
     valido = True
     val = schema.iter_errors(evaml_file)
     for idx, validation_error in enumerate(val, start=1):
-      print(f'[{idx}] path: {validation_error.path} | reason: {validation_error.reason}')
+      print(f'  [{idx}] path: [red b]{validation_error.path}[/] | reason: {validation_error.reason}')
       valido = False
   except Exception as e:
     print(val)
@@ -55,90 +61,120 @@ def process_loop(script_node):
     for i in range(len(script_node)):
         if len(script_node[i]) != 0: process_loop(script_node[i])
         if script_node[i].tag == "loop":
-            id_loop_number += 1 # var utilizada na criação de nomes de algumas variáveis automáticas. Comeca com 1
-            loop_copy = copy.deepcopy(script_node[i]) # copia o elemento  <loop>
-            c = ET.Element("counter") # cria o <counter> que inicializa a var de iteração com o valor zero
-            if script_node[i].get("id") != None: # caso o <loop> seja alvo de um goto
+            id_loop_number += 1 # Var utilizada na criação de nomes de algumas variáveis automáticas. Comeca com 1.
+            loop_copy = copy.deepcopy(script_node[i]) # Copia o elemento  <loop>.
+            c = ET.Element("counter") # Cria o <counter> que inicializa a var de iteração com o valor zero.
+            if script_node[i].get("id") != None: # Caso o <loop> seja alvo de um goto.
                 id_loop = script_node[i].attrib["id"] 
                 c.attrib["id"] = id_loop
             if script_node[i].get("var") != None: 
                 var_loop = script_node[i].attrib["var"] 
                 c.attrib["var"] = var_loop
-            else: # caso o usuario não defina uma variação para a iteração, a variavel default "ITERATION_VAR...." será criada
-                # id_loop_number += 1 # var utilizada na criação de nomes de algumas variáveis automáticas. Comeca com 1
+            else: # Caso o usuário não defina uma variável para a iteração, a variavel default "ITERATION_VAR...." será criada.
                 var_loop = "ITERATION_VAR" + str(id_loop_number) 
+
             times_loop = script_node[i].attrib["times"] 
             c.attrib["var"] = var_loop 
             c.attrib["op"] = "=" 
-            c.attrib["value"] = "1"  # inicializa a variavel contadora com zero
+            c.attrib["value"] = "1"  # Inicializa a variavel contadora com zero
 
-            script_node.remove(script_node[i]) # remove o elemento <loop> pois não é mais necessário (temos a sua cópia em )
-            script_node.insert(i, c)  # adiciona o <counter> que inicializa a variavel de iteração
+            script_node.remove(script_node[i]) # Remove o elemento <loop> pois não é mais necessário (temos a sua cópia em )
+            script_node.insert(i, c)  # Adiciona o <counter> que inicializa a variavel de iteração
 
-            s = ET.Element("switch")  # cria o elemento <switch>
-            s.attrib["id"] = "LOOP_ID" + str(id_loop_number) + "_" + var_loop  # prefixo padrao do id automatico gerado para o loop _LOOP_ID_
+            s = ET.Element("switch")  # Cria o elemento <switch>
+            s.attrib["id"] = "LOOP_ID" + str(id_loop_number) + "_" + var_loop  # Prefixo padrao do id automatico gerado para o loop _LOOP_ID_
             s.attrib["var"] = var_loop 
-            script_node.insert(i + 1, s)  # adiciona o <switch>, com seus filhos, ao elemento script
+            script_node.insert(i + 1, s)  # Adiciona o <switch>, com seus filhos, ao elemento script
 
-            cs = ET.Element("case") # cria o elemento <case>
+            cs = ET.Element("case") # Cria o elemento <case>
             cs.attrib["op"] = "lte" 
             cs.attrib["value"] = times_loop 
+            cs.extend(loop_copy)  # O extend adiciona apenas os filhos de loop
 
-            ####
-            ####
-
-
-
-            #cs.insert(1, loop_copy)  # aqui, o elemento pai (loop) vem junto, e isso é ruim pois queremos apenas seus filhos
-            cs.extend(loop_copy)  # o extend adiciona apenas os filhos de loop
-
-            c = ET.Element("counter")  # cria o <counter> que incrementa a variável de iteração
+            c = ET.Element("counter")  # Cria o <counter> que incrementa a variável de iteração
             c.attrib["var"] = var_loop
             c.attrib["op"] = "+"
             c.attrib["value"] = "1"
             cs.append(c)
 
-            g = ET.Element("goto")  # cria o <goto> que faz o loop acontecer
+            g = ET.Element("goto")  # Cria o <goto> que faz o loop acontecer
             g.attrib["target"] = "LOOP_ID" + str(id_loop_number) + "_" + var_loop  # prefixo padrao do id automatico gerado para o loop _LOOP_ID_
 
-            cs.append(g)  # adiciona o <goto> (que gerar causa a repetição) ao final do <case> 
+            cs.append(g)  # Adiciona o <goto> (que causa a repetição) ao final do <case> 
 
-            # df = ET.Element("default") # cria o elemento <default> para o <case> do loop
+            s.insert(0, cs)  # Insere o <case> com o corpo dentro do <switch>
 
-            s.insert(0, cs)  # insere o <case> com o corpo dentro do <switch>
-            # s.insert(1, df)  # insere o comando <default> que gera a conexão com o restante do script, evitando a descontinuidade
-
-            process_loop(script_node) # o processamento de um loop muda a estrutura inicial do scriptnode e precisa ser revisitada
+            process_loop(script_node) # O processamento de um loop muda a estrutura inicial do scriptnode e precisa ser revisitada
 
 
+xmlschema_file = os.getcwd() + "/fred_robot_package/xml_schema/evaml_schema.xsd"
+schema = xmlschema.XMLSchema(xmlschema_file)
 
-schema = xmlschema.XMLSchema("xml_schema/evaml_schema.xsd")
+
+
+
+script_file = sys.argv[1]
+
+console.clear()
+console.rule("\n🤖 [yellow reverse b]  Parsing the script: " + script_file.split("/")[-1] + "  [/] 🤖")
+print()
 
 # Validating the script. #########################################################################
-console.clear()
-console.rule("\n🤖 [yellow reverse b]  Parsing the script: " + "file_name" + "  [/] 🤖")
-print()
-script_file = sys.argv[1]
-print("[b white reverse] STEP 1. Let's validate de script. [/]\n")
+with Progress(
+    "[bold blue]{task.description}",
+    BarColumn(),
+    "[progress.percentage]{task.percentage:>3.0f}%",
+) as progress:
+    task = progress.add_task("[b white reverse] STEP 1. Validating the script     ", total=30)
+    
+    for i in range(30):
+        progress.update(task, advance=1)
+        time.sleep(0.02)
+        
 xml_file_ok = evaml_validator(script_file)
 
 if not xml_file_ok:
-  print("\n[b white on red blink] VALIDATION ERROR [/]: The script [b white]" + script_file + " [/]failed the validation process with the [b white]XMLSchema[/]. Please, [b white]check[/] the info above. [blink]👆[/]\n")
+  print("\n[b white on red blink] VALIDATION ERROR 👆 [/]: The script [b cyan]" + script_file.split("/")[-1] + " [/][b white]failed[/]. Please, [b white]check[/] the info above.\n")
   exit(1)
 else:
-  print("   [b green reverse] The script was validated! [/]\n")
+  print(" ✅ [b green reverse] The script was validated! [/]\n")
 
 
 # Parsing (Loop processing)
-print("[b white reverse] STEP 2. Parsing the file (Expanding <loop> elements). [/]\n")
-id_loop_number = 0  # id usado na criação dos ids dos loops
-root = xml_file_ok.getroot() # Evaml root node
+with Progress(
+    "[bold blue]{task.description}",
+    BarColumn(),
+    "[progress.percentage]{task.percentage:>3.0f}%",
+) as progress:
+    task = progress.add_task("[b white reverse] STEP 2. Parsing the script file   ", total=30)
+    
+    for i in range(30):
+        progress.update(task, advance=1)
+        time.sleep(0.02)
+
+id_loop_number = 0  # Id usado na criação dos ids dos loops.
+root = xml_file_ok.getroot() # Evaml root node.
 script_node = root.find("script")
 process_loop(script_node)
 
-print("[b white reverse] STEP 3. Generating the EvaML parsed file. [/]\n")
-# Gera o arquivo com as macros expandidas (caso existam) para a proxima etapa
-xml_file_ok.write("_parsed_file.xml", "UTF-8")
+print(" ✅ [b green reverse] Done! [/]\n")
+
+
+# Gera o arquivo com os loops expandidos (caso existam).
+with Progress(
+    "[bold blue]{task.description}",
+    BarColumn(),
+    "[progress.percentage]{task.percentage:>3.0f}%",
+) as progress:
+    task = progress.add_task("[b white reverse] STEP 3. Generating the EvaML file [/]", total=30)
+    
+    for i in range(30):
+        progress.update(task, advance=1)
+        time.sleep(0.02)
+
+print(" ✅ [b green reverse] The file " +  script_file.split('/')[-1][:-4] + "_evaml.xml" + " was created! [/]\n\n")
+
+xml_file_ok.write(script_file[:-4] + "_evaml.xml", "UTF-8")
 
 
 

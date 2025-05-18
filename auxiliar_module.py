@@ -10,7 +10,11 @@ from rich import print, box
 from rich.console import Console
 from rich.table import Table
 
+import config
+
+
 console = Console()
+
 
 def identify_targets(xml_root, verbose_mode=False):
     tab_ids = {}
@@ -59,7 +63,7 @@ def import_modules(xml_root, verbose_mode=False):
     # From here, the tab_modules will have its structure modified. New information will be added to its value (list).
     for element_tag in tab_modules:
         module_name = element_tag.lower() + "_module" # Nome padrão para pastas dos módulos
-        sys.path.insert(0, module_name + "/") # Coloca o diretório do módulo no path.
+        sys.path.insert(0, "/home/marcelo/evaml_2025/" + config.ROBOT_PACKAGE_FOLDER + "/" + module_name + "/") # Coloca o diretório do módulo no path.
         try:
             mod = importlib.import_module(module_name) # importa o módulo
             tab_modules[element_tag].append(module_name + ".py")
